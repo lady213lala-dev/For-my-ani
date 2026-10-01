@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>A Surprise For You, Jaan 💖</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fff5f7;
+      --card-bg: #ffffff;
+      --primary: #ff4d6d;
+      --primary-dark: #c9184a;
+      --accent: #ffb3c1;
+      --text: #2d0010;
+      --text-muted: #804a58;
+      --gold: #d4af37;
+      --border-rad: 24px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      background: radial-gradient(circle at top, #ffe5ec 0%, #fff0f3 50%, #fdf2f4 100%);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      min-height: 600px;
+      background: var(--card-bg);
+      border-radius: var(--border-rad);
+      box-shadow: 0 20px 40px rgba(255, 77, 109, 0.15), 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid rgba(255, 179, 193, 0.45);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .screen {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      min-height: 580px;
+      padding: 24px 20px;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    .screen.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--primary-dark); text-align: center; }
+    p.sub { font-size: 13px; color: var(--text-muted); text-align: center; margin-top: 4px; }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(255, 77, 109, 0.25);
+      margin-top: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn:active { transform: scale(0.98); }
+
+    /* Step 1: Envelope */
+    .envelope-screen { justify-content: center; align-items: center; text-align: center; gap: 20px; }
+    .floating-heart { font-size: 48px; animation: floatHeart 2s infinite ease-in-out; }
+    @keyframes floatHeart { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-8px) scale(1.08); } }
+    .letter-icon-card {
+      width: 140px;
+      height: 140px;
+      background: #fff0f3;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      border: 2px solid #ffccd5;
+      box-shadow: 0 12px 24px rgba(255, 77, 109, 0.2);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .letter-icon-card:active { transform: scale(0.95); }
+
+    /* Step 2: Letter */
+    .note-card {
+      background: #fffdfa;
+      border: 1px solid #f2e2cb;
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.03);
+      margin: 16px 0;
+      flex-grow: 1;
+      overflow-y: auto;
+      max-height: 440px;
+    }
+    .note-text {
+      font-family: 'Caveat', cursive;
+      font-size: 20px;
+      line-height: 1.5;
+      color: #3b2024;
+      white-space: pre-wrap;
+    }
+    .signature {
+      text-align: right;
+      margin-top: 14px;
+      font-family: 'Caveat', cursive;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Step 3: Certificate */
+    .cert-frame {
+      background: #fffdfa;
+      border: 3px double var(--gold);
+      padding: 20px 14px;
+      border-radius: 12px;
+      text-align: center;
+      position: relative;
+      margin: 14px 0;
+    }
+    .cert-seal {
+      width: 44px;
+      height: 44px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin: 0 auto 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+      color: white;
+    }
+    .cert-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 800; color: #432818; }
+    .cert-name { font-family: 'Caveat', cursive; font-size: 32px; color: var(--primary-dark); font-weight: 700; margin: 6px 0; }
+    .cert-clause { font-size: 11px; color: #583101; line-height: 1.45; margin: 10px 0; font-style: italic; }
+
+    /* Step 4: Balloon Pop */
+    .balloons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .balloon-btn {
+      background: #fff0f3;
+      border: 2px solid #ffccd5;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      height: 86px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 28px;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .balloon-btn::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-bottom: 6px solid #ffccd5;
+    }
+    .balloon-btn.popped {
+      background: #f4f4f4;
+      border-color: #ddd;
+      transform: scale(0.9);
+      opacity: 0.45;
+      cursor: default;
+    }
+    .balloon-btn.popped::after { display: none; }
+
+    /* Modal Popup */
+    .modal {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      max-width: 320px;
+      animation: popIn 0.3s ease;
+    }
+    @keyframes popIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- STEP 1: ENVELOPE -->
+  <div class="screen envelope-screen active" id="screen-envelope">
+    <div class="floating-heart">💌</div>
+    <h2>Something Just For You</h2>
+    <p class="sub">Made with all my love</p>
+    <div class="letter-icon-card" onclick="goToScreen('screen-letter')">
+      💖
+    </div>
+    <p style="font-size: 13px; color: var(--primary); font-weight: 600;">Tap the heart to open</p>
+  </div>
+
+  <!-- STEP 2: LETTER -->
+  <div class="screen" id="screen-letter">
+    <h2>Dear Jaan,</h2>
+    <div class="note-card">
+      <div class="note-text">Happy boyfriend's day baby🥰🫶🏻
+
+I feel like main tumhe enough nahi bata pati ki tum mere liye kitne special ho.. Tum sirf mere boyfriend nahi ho, tum woh person ho jiske saath main apni khushi, sadness, random thoughts aur literally koi bhi bakwaas share kar sakti hoon🥹❤️
+
+Tumhare saath mujhe ek alag hi comfort milta hai.. Main tumhare saamne bina kisi filter ke apni stupid, emotional, annoying aur overthinking wali side reh sakti hoon, and somehow you still love me through all of it😂❤️
+
+Hum perfect nahi hain..
+Hum ladte hain, irritate karte hain, misunderstandings hoti hain, but at the end of the day, you're still the person I want to talk to and share everything with...🫶🏻
+
+Thank you for being patient with me, meri moods handle karne ke liye, mujhe hasane ke liye, aur vo countless little things ke liye jo shayad tumhe normal lagti hain but mere liye bohot matter karti hain...
+
+I’m genuinely so grateful to have you in my life. ❤️
+Happy Boyfriend’s Day, my love...🫶🏻
+I love you more than I can ever put into words. ❤️</div>
+      <div class="signature">— Your bebo 💖</div>
+    </div>
+    <button class="btn" onclick="goToScreen('screen-cert')">Next: Your Certificate 📜</button>
+  </div>
+
+  <!-- STEP 3: BOYFRIEND CERTIFICATE -->
+  <div class="screen" id="screen-cert">
+    <h2>Official Recognition 📜</h2>
+    <p class="sub">Terms & conditions are strictly non-negotiable</p>
+
+    <div class="cert-frame" id="cert-to-download">
+      <div class="cert-seal">★</div>
+      <div class="cert-title">OFFICIAL BEST BOYFRIEND CERTIFICATE</div>
+      <p style="font-size: 11px; margin-top: 6px; color: #583101;">This certificate is proudly awarded to</p>
+      <div class="cert-name">Jaan</div>
+      <p class="cert-clause">
+        "For consistently handling my mood swings, listening to my random bakwaas, being my safe space, and choosing to love me through all my dramatic and overthinking moments."
+      </p>
+      <div style="font-size: 11px; font-weight: 700; color: #432818; margin-top: 6px;">
+        Status: Irreplaceable • Lifetime Validity
+      </div>
+      <div style="font-size: 12px; margin-top: 8px; font-family: 'Caveat', cursive; color: var(--primary);">
+        Certified by: Your bebo ✍️
+      </div>
+    </div>
+
+    <button class="btn" style="background:#583101; box-shadow:none; margin-top:6px;" onclick="downloadCert()">⬇ Save Certificate</button>
+    <button class="btn" onclick="goToScreen('screen-balloons')">Next: Pop The Balloons 🎈</button>
+  </div>
+
+  <!-- STEP 4: BALLOONS -->
+  <div class="screen" id="screen-balloons">
+    <h2>Pop Every Balloon 🎈</h2>
+    <p class="sub">Each one holds something special about you</p>
+
+    <div class="balloons-grid">
+      <div class="balloon-btn" onclick="popBalloon(0, 'You are my safe space and my ultimate comfort zone. 🥹')">💖</div>
+      <div class="balloon-btn" onclick="popBalloon(1, 'The way you patiently handle all my mood swings. 😂❤️')">🎁</div>
+      <div class="balloon-btn" onclick="popBalloon(2, 'I can share every little random thought with you without any filters. 🫶🏻')">✨</div>
+      <div class="balloon-btn" onclick="popBalloon(3, 'Thank you for always making me laugh, even on hard days. 🧸')">🌸</div>
+      <div class="balloon-btn" onclick="popBalloon(4, 'No matter what happens, you are still my person. ❤️')">🤍</div>
+      <div class="balloon-btn" onclick="popBalloon(5, 'I love you more than I can ever put into words, Jaan! 💖')">💌</div>
+    </div>
+
+    <p id="balloon-status" style="text-align: center; font-size: 12px; color: var(--text-muted);">6 balloons remaining</p>
+  </div>
+
+  <!-- MODAL FOR BALLOON REVEALS -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div style="font-size: 36px; margin-bottom: 8px;">🎈</div>
+      <p id="modal-text" style="font-size: 15px; line-height: 1.5; color: var(--text); font-weight: 600;"></p>
+      <button class="btn" style="margin-top: 14px; padding: 10px;" onclick="closeModal()">Sweet 💖</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let poppedCount = 0;
+
+  function goToScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function popBalloon(index, text) {
+    const btns = document.querySelectorAll('.balloon-btn');
+    if (!btns[index].classList.contains('popped')) {
+      btns[index].classList.add('popped');
+      poppedCount++;
+      confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
+
+      document.getElementById('modal-text').innerText = text;
+      document.getElementById('modal').classList.add('active');
+
+      const remaining = 6 - poppedCount;
+      document.getElementById('balloon-status').innerText = remaining > 0 ? `${remaining} balloons remaining` : `You popped them all! Happy Boyfriend's Day, my love! 💖`;
+      
+      if(poppedCount === 6) {
+        setTimeout(() => {
+          confetti({ particleCount: 160, spread: 100, origin: { y: 0.5 } });
+        }, 400);
+      }
+    }
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+  }
+
+  function downloadCert() {
+    const el = document.getElementById('cert-to-download');
+    html2canvas(el, { scale: 2 }).then(canvas => {
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/png');
+      a.download = 'Boyfriend_Certificate_Jaan.png';
+      a.click();
+    });
+  }
+</script>
+
+</body>
+</html>
